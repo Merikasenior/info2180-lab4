@@ -1,43 +1,30 @@
-window.onload= function()
-{
-    searchhero();
-}
+window.onload = () => {
+    var searchbttn = document.getElementById("search");
+    var httpRequest;
 
-function searchhero () 
-{
-    var httpRequest = new XMLHttpRequest();
+    searchbttn.addEventListener('click', (e)=>{
+        e.preventDefault();
 
-    var url = "superheroes.php";
-
-    document.getElementById("btn").onclick =  function() 
-    {
-               
-        httpRequest.onreadystatechange = getHeroes;
+        httpRequest=new XMLHttpRequest();
+        
+        var input = document.getElementById("txt").value;
+        var url = "superheroes.php" + "?query=" + input;
+        httpRequest.onreadystatechange = loadSuperhero;
         httpRequest.open('GET', url);
         httpRequest.send();
-        return false;
-    }
 
-        function getHeroes () 
-        {
-            var result = document.getElementById("result");
-
-            if (httpRequest.readyState === XMLHttpRequest.DONE)
-             {
-                if (httpRequest.status === 200)
-                {
-                    var res = httpRequest.responseText;
-                    result.innerHTML = res;
-                }
-                else {
-                    alert ('There was an error')
-                }
-
+    });//end button action listener
+    
+    var loadSuperhero = function (){
+        if(httpRequest.readyState === XMLHttpRequest.DONE){
+            if(httpRequest.status === 200){
+                var response = httpRequest.responseText;
+                var result = document.getElementById("result");
+                result.setAttribute("id","result");
+                result.innerHTML=response;
+            }else{
+                alert('There was a problem with the request.');
             }
-            
-           
         }
-   
-        
-
     }
+};
